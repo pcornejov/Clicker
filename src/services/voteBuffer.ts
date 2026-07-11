@@ -15,9 +15,12 @@ interface PendingVotes {
  * clicks are reflected instantly on screen while the buffer syncs in the
  * background every VOTE_FLUSH_INTERVAL_MS (and on page hide, best effort).
  */
+export type VoteFlushListener = (optionId: string, count: number) => void
+
 export class VoteBuffer {
   private pending = new Map<string, PendingVotes>()
   private timer: ReturnType<typeof setInterval> | null = null
+  private listeners = new Set<VoteFlushListener>()
   private readonly service: Pick<BattleService, 'submitVotes'>
 
   constructor(service: Pick<BattleService, 'submitVotes'>) {
@@ -28,6 +31,15 @@ export class VoteBuffer {
       })
       window.addEventListener('pagehide', () => void this.flush())
     }
+  }
+
+  /**
+   * Notifies when buffered votes are handed to the backend, so optimistic UI
+   * counters can be reconciled against realtime snapshots.
+   */
+  onFlush(listener: VoteFlushListener): () => void {
+    this.listeners.add(listener)
+    return () => this.listeners.delete(listener)
   }
 
   add(battleId: string, optionId: string, count = 1): void {
@@ -47,6 +59,12 @@ export class VoteBuffer {
     }
     const batch = this.pending
     this.pending = new Map()
+    // Firestore applies increments to local snapshots as soon as the write is
+    // issued (latency compensation), so optimistic counters can drop these
+    // votes now without the total visibly dipping.
+    batch.forEach(({ count }, optionId) => {
+      this.listeners.forEach((listener) => listener(optionId, count))
+    })
     await Promise.all(
       [...batch.entries()].flatMap(([optionId, { battleId, count }]) => {
         // Split very large bursts to respect the cap enforced in firestore.rules.
