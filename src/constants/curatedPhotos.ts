@@ -1,5 +1,6 @@
-export interface RegionPhoto {
-  landmark: string
+export interface CuratedPhoto {
+  /** Short description of what the photo shows. */
+  subject: string
   imageUrl: string
   commonsPageUrl: string
   license: string
@@ -7,15 +8,18 @@ export interface RegionPhoto {
 }
 
 /**
- * One real, freely-licensed photo per Chilean region, showing its most
- * iconic landmark. Sourced from Wikimedia Commons (each URL verified with a
- * direct HTTP request before being added here). Purely a presentational
- * lookup keyed by option name — the data model has no image field, so a
- * future battle on a different topic is unaffected.
+ * One real, freely-licensed photo per well-known option name (Chilean
+ * regions, typical dishes, etc.), sourced from Wikimedia Commons — each URL
+ * verified with a direct HTTP request before being added here. Purely a
+ * presentational lookup keyed by option name; an admin-uploaded photo (see
+ * OptionAvatar) always takes priority, and an unrecognized name simply falls
+ * back to the icon emblem. New battle topics work without touching this
+ * file — it's a bonus for names we happen to recognize, not a requirement.
  */
-export const REGION_PHOTOS: Record<string, RegionPhoto> = {
+export const CURATED_PHOTOS: Record<string, CuratedPhoto> = {
+  // ----- Regiones de Chile -----
   'Arica y Parinacota': {
-    landmark: 'Lago Chungará y volcanes Payachatas',
+    subject: 'Lago Chungará y volcanes Payachatas',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Lago_Chungar%C3%A1_y_Nevados_de_Payachatas.jpg/960px-Lago_Chungar%C3%A1_y_Nevados_de_Payachatas.jpg',
     commonsPageUrl:
@@ -24,7 +28,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Pablo Montecinos',
   },
   Tarapacá: {
-    landmark: 'Oficina salitrera Humberstone',
+    subject: 'Oficina salitrera Humberstone',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Oficinas_salitreras_de_Humberstone_y_Santa_Laura%2C_Chile%2C_2016-02-11%2C_DD_25.jpg/960px-Oficinas_salitreras_de_Humberstone_y_Santa_Laura%2C_Chile%2C_2016-02-11%2C_DD_25.jpg',
     commonsPageUrl:
@@ -33,7 +37,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Diego Delso',
   },
   Antofagasta: {
-    landmark: 'La Portada',
+    subject: 'La Portada',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Monumento_Nacional_La_Portada%2C_Antofagasta-Chile.JPG/960px-Monumento_Nacional_La_Portada%2C_Antofagasta-Chile.JPG',
     commonsPageUrl:
@@ -42,7 +46,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'G.vera',
   },
   Atacama: {
-    landmark: 'Valle de la Luna',
+    subject: 'Valle de la Luna',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Valle_de_la_Luna%2C_San_Pedro_de_Atacama%2C_Chile%2C_2016-02-01%2C_DD_152.JPG/960px-Valle_de_la_Luna%2C_San_Pedro_de_Atacama%2C_Chile%2C_2016-02-01%2C_DD_152.JPG',
     commonsPageUrl:
@@ -51,7 +55,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Diego Delso',
   },
   Coquimbo: {
-    landmark: 'Valle del Elqui',
+    subject: 'Valle del Elqui',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Valle_del_Elqui_1.JPG/960px-Valle_del_Elqui_1.JPG',
     commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Valle_del_Elqui_1.JPG',
@@ -59,7 +63,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Menaqs',
   },
   Valparaíso: {
-    landmark: 'Cerros y puerto de Valparaíso',
+    subject: 'Cerros y puerto de Valparaíso',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/La_ciudad_de_Valpara%C3%ADso_desde_el_Cerro_Artiller%C3%ADa%2C_Chile_2019.jpg/960px-La_ciudad_de_Valpara%C3%ADso_desde_el_Cerro_Artiller%C3%ADa%2C_Chile_2019.jpg',
     commonsPageUrl:
@@ -68,7 +72,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Carlos Teixidor Cadenas',
   },
   Metropolitana: {
-    landmark: 'Santiago desde el Cerro San Cristóbal',
+    subject: 'Santiago desde el Cerro San Cristóbal',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Sanhattan_desde_el_Cerro_San_Crist%C3%B3bal%2C_Santiago_de_Chile.jpg/960px-Sanhattan_desde_el_Cerro_San_Crist%C3%B3bal%2C_Santiago_de_Chile.jpg',
     commonsPageUrl:
@@ -77,7 +81,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'AlexVanHeusen',
   },
   "O'Higgins": {
-    landmark: 'Viñedos del Valle de Colchagua',
+    subject: 'Viñedos del Valle de Colchagua',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Vi%C3%B1a_Santa_Rita%2C_Valle_de_Colchagua.jpg/960px-Vi%C3%B1a_Santa_Rita%2C_Valle_de_Colchagua.jpg',
     commonsPageUrl:
@@ -86,7 +90,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Jmiguelbarros',
   },
   Maule: {
-    landmark: 'Radal Siete Tazas',
+    subject: 'Radal Siete Tazas',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Parque_Nacional_Radal_Siete_Tazas_%2813%29.jpg/960px-Parque_Nacional_Radal_Siete_Tazas_%2813%29.jpg',
     commonsPageUrl:
@@ -95,7 +99,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Manuel Repol',
   },
   Ñuble: {
-    landmark: 'Nevados de Chillán',
+    subject: 'Nevados de Chillán',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Chillan_y_Nevados_de_Chillan_1.jpg/960px-Chillan_y_Nevados_de_Chillan_1.jpg',
     commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Chillan_y_Nevados_de_Chillan_1.jpg',
@@ -103,7 +107,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Dropus',
   },
   Biobío: {
-    landmark: 'Salto del Laja',
+    subject: 'Salto del Laja',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Salto_del_Laja.jpg/960px-Salto_del_Laja.jpg',
     commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Salto_del_Laja.jpg',
@@ -111,7 +115,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Warko',
   },
   Araucanía: {
-    landmark: 'Volcán y Lago Villarrica',
+    subject: 'Volcán y Lago Villarrica',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/J25_045_Lago%2C_Volc%C3%A1n_Villarrica.jpg/960px-J25_045_Lago%2C_Volc%C3%A1n_Villarrica.jpg',
     commonsPageUrl:
@@ -120,7 +124,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Falk2',
   },
   'Los Ríos': {
-    landmark: 'Valdivia',
+    subject: 'Valdivia',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Muelle_Mirador%2C_Valdivia%2C_20190216_-_10.jpg/960px-Muelle_Mirador%2C_Valdivia%2C_20190216_-_10.jpg',
     commonsPageUrl:
@@ -129,7 +133,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Carlos Figueroa Rojas',
   },
   'Los Lagos': {
-    landmark: 'Volcán Osorno y Saltos de Petrohué',
+    subject: 'Volcán Osorno y Saltos de Petrohué',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Volcan_Osorno_and_Saltos_de_Petrohue.jpg/960px-Volcan_Osorno_and_Saltos_de_Petrohue.jpg',
     commonsPageUrl:
@@ -138,7 +142,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Silvio Rossi',
   },
   Aysén: {
-    landmark: 'Capillas de Mármol',
+    subject: 'Capillas de Mármol',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Catedral_de_M%C3%A1rmol_1.jpg/960px-Catedral_de_M%C3%A1rmol_1.jpg',
     commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Catedral_de_M%C3%A1rmol_1.jpg',
@@ -146,7 +150,7 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     author: 'Manxuc',
   },
   Magallanes: {
-    landmark: 'Torres del Paine',
+    subject: 'Torres del Paine',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Towers_of_Paine_-_Torres_del_Paine_National_Park_13.jpg/960px-Towers_of_Paine_-_Torres_del_Paine_National_Park_13.jpg',
     commonsPageUrl:
@@ -154,8 +158,52 @@ export const REGION_PHOTOS: Record<string, RegionPhoto> = {
     license: 'CC BY-SA 4.0',
     author: 'Thomas Fuhrmann',
   },
+
+  // ----- Comida rápida chilena -----
+  Completo: {
+    subject: 'Completo italiano',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Vienesa_Italiana_-_Completo_Italiano_-_Chilean_Hotdog.jpg/960px-Vienesa_Italiana_-_Completo_Italiano_-_Chilean_Hotdog.jpg',
+    commonsPageUrl:
+      'https://commons.wikimedia.org/wiki/File:Vienesa_Italiana_-_Completo_Italiano_-_Chilean_Hotdog.jpg',
+    license: 'CC BY-SA 4.0',
+    author: 'Maximiliano Nadjar',
+  },
+  'Empanada de pino': {
+    subject: 'Empanada de pino',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Empanada_de_pino.jpg/960px-Empanada_de_pino.jpg',
+    commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Empanada_de_pino.jpg',
+    license: 'CC BY 2.0',
+    author: 'J B',
+  },
+  Sopaipilla: {
+    subject: 'Sopaipillas',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Sopaipillas_para_la_once.JPG/960px-Sopaipillas_para_la_once.JPG',
+    commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Sopaipillas_para_la_once.JPG',
+    license: 'CC BY-SA 4.0',
+    author: 'Vcr2012',
+  },
+  Chorrillana: {
+    subject: 'Chorrillana casera',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Chorrillana_Casera.jpg/960px-Chorrillana_Casera.jpg',
+    commonsPageUrl: 'https://commons.wikimedia.org/wiki/File:Chorrillana_Casera.jpg',
+    license: 'CC BY-SA 4.0',
+    author: 'Fcopardo',
+  },
+  Churrasco: {
+    subject: 'Sándwich Barros Luco',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/S%C3%A1ndwich_Barros_Luco_-_Fuente_Mardoqueo_-_01.jpg/960px-S%C3%A1ndwich_Barros_Luco_-_Fuente_Mardoqueo_-_01.jpg',
+    commonsPageUrl:
+      'https://commons.wikimedia.org/wiki/File:S%C3%A1ndwich_Barros_Luco_-_Fuente_Mardoqueo_-_01.jpg',
+    license: 'CC BY-SA 4.0',
+    author: 'Carlos Figueroa Rojas',
+  },
 }
 
-export function getRegionPhoto(name: string): RegionPhoto | undefined {
-  return REGION_PHOTOS[name]
+export function getCuratedPhoto(name: string): CuratedPhoto | undefined {
+  return CURATED_PHOTOS[name]
 }

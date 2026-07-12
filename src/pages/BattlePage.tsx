@@ -11,7 +11,7 @@ import { useActiveBattle } from '@/hooks/useActiveBattle'
 import { useVote } from '@/hooks/useVote'
 import { buildRanking } from '@/utils/ranking'
 import { getEffectiveStatus } from '@/utils/battleStatus'
-import { getRegionPhoto } from '@/constants/regionPhotos'
+import { getCuratedPhoto } from '@/constants/curatedPhotos'
 
 export function BattlePage() {
   const { battle, options, isLoading, error, hasNoActiveBattle } = useActiveBattle()
@@ -82,7 +82,7 @@ export function BattlePage() {
         </p>
       )}
 
-      {ranked.some((option) => getRegionPhoto(option.name)) && (
+      {ranked.some((option) => getCuratedPhoto(option.name)) && (
         <p className="pb-4 text-center text-[11px] text-muted-foreground/60">
           Fotos:{' '}
           <a

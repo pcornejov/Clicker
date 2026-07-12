@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { getOptionVisual } from '@/constants/optionVisuals'
-import { getRegionPhoto } from '@/constants/regionPhotos'
+import { getCuratedPhoto } from '@/constants/curatedPhotos'
 import { cn } from '@/lib/utils'
 
 interface OptionAvatarProps {
@@ -14,12 +14,12 @@ const SIZE_CLASSES = 'flex size-11 shrink-0 items-center justify-center rounded-
 
 /**
  * Visual emblem for an option: the admin-uploaded photo when set, else a
- * curated photo for known names (see regionPhotos.ts), else a gradient +
+ * curated photo for known names (see curatedPhotos.ts), else a gradient +
  * icon derived from the name. Falls back automatically if a photo fails to
  * load.
  */
 export function OptionAvatar({ name, imageUrl, className }: OptionAvatarProps) {
-  const photoUrl = imageUrl || getRegionPhoto(name)?.imageUrl
+  const photoUrl = imageUrl || getCuratedPhoto(name)?.imageUrl
   const [photoFailed, setPhotoFailed] = useState(false)
   const [prevPhotoUrl, setPrevPhotoUrl] = useState(photoUrl)
   const { icon: Icon, gradient } = getOptionVisual(name)

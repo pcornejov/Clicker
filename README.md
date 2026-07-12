@@ -100,7 +100,7 @@ battles/{battleId}              title, description, status, startDate, endDate, 
 settings/app                    activeBattleId
 ```
 
-Las fotos de las opciones se guardan en Firebase Storage (`battles/{battleId}/options/{optionId}.jpg`, redimensionadas a 480px en el navegador antes de subir) y su URL queda en `imageUrl`. Sin foto propia, la opción usa una foto curada (solo para las 16 regiones de ejemplo, `src/constants/regionPhotos.ts`) o un emblema de ícono + gradiente derivado del nombre — nunca una tarjeta vacía.
+Las fotos de las opciones se guardan en Firebase Storage (`battles/{battleId}/options/{optionId}.jpg`, redimensionadas a 480px en el navegador antes de subir) y su URL queda en `imageUrl`. Sin foto propia, la opción usa una foto curada por nombre (`src/constants/curatedPhotos.ts` — regiones y comidas típicas de ejemplo) o, si el nombre no se reconoce, un emblema de ícono + gradiente — nunca una tarjeta vacía.
 
 ## Estructura del proyecto
 

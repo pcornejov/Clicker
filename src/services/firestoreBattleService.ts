@@ -171,11 +171,18 @@ export const firestoreBattleService: BattleService = {
   },
 
   async deleteBattle(battleId) {
+    const db = getDb()
     // The client SDK doesn't cascade-delete subcollections.
-    const options = await getDocs(collection(getDb(), BATTLES, battleId, OPTIONS))
-    const batch = writeBatch(getDb())
+    const options = await getDocs(collection(db, BATTLES, battleId, OPTIONS))
+    const batch = writeBatch(db)
     options.docs.forEach((docSnap) => batch.delete(docSnap.ref))
-    batch.delete(doc(getDb(), BATTLES, battleId))
+    batch.delete(doc(db, BATTLES, battleId))
+    // Deleting the active battle would otherwise leave settings/app pointing
+    // at a document that no longer exists.
+    const settings = await getDoc(doc(db, SETTINGS_APP_PATH))
+    if (settings.exists() && settings.data().activeBattleId === battleId) {
+      batch.set(doc(db, SETTINGS_APP_PATH), { activeBattleId: null })
+    }
     await batch.commit()
   },
 
