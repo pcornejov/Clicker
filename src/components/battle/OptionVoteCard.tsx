@@ -23,7 +23,6 @@ interface Burst {
 export function OptionVoteCard({ option, canVote, onVote }: OptionVoteCardProps) {
   const [bursts, setBursts] = useState<Burst[]>([])
   const burstId = useRef(0)
-  const isLeader = option.position === 1 && option.displayVotes > 0
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (!canVote) return
@@ -42,8 +41,9 @@ export function OptionVoteCard({ option, canVote, onVote }: OptionVoteCardProps)
       whileTap={canVote ? { scale: 0.96 } : undefined}
       className={cn(
         'relative flex select-none items-center gap-2.5 overflow-hidden rounded-2xl border bg-card/60 p-3 text-left backdrop-blur transition-colors',
+        // Who's leading is the Ranking section's job, not the grid's — cards
+        // here stay visually uniform so the fixed layout reads as one set.
         canVote && 'cursor-pointer hover:border-blue-500/40 hover:bg-card',
-        isLeader && 'border-amber-500/40 shadow-[0_0_24px_-10px_theme(colors.amber.500/60%)]',
       )}
       aria-label={`Votar por ${option.name}`}
     >
