@@ -1,6 +1,5 @@
 import { Link, Outlet } from 'react-router'
-import { ZapIcon } from 'lucide-react'
-import { APP_NAME, APP_TAGLINE } from '@/constants/appConfig'
+import { APP_FLAG_EMOJI, APP_NAME, APP_TAGLINE } from '@/constants/appConfig'
 import { ROUTES } from '@/constants/routes'
 
 export function MainLayout() {
@@ -17,8 +16,8 @@ export function MainLayout() {
           to={ROUTES.home}
           className="flex items-center gap-2 font-bold tracking-tight transition-opacity hover:opacity-80"
         >
-          <span className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-red-500">
-            <ZapIcon className="size-4 text-neutral-950" aria-hidden="true" />
+          <span className="text-2xl leading-none" aria-hidden="true">
+            {APP_FLAG_EMOJI}
           </span>
           {APP_NAME}
         </Link>
@@ -30,7 +29,7 @@ export function MainLayout() {
       </main>
 
       <footer className="mx-auto w-full max-w-2xl px-4 py-6 text-center text-xs text-muted-foreground">
-        {APP_NAME} — hecho en Chile 🇨🇱
+        {APP_NAME} — hecho en Chile {APP_FLAG_EMOJI}
       </footer>
     </div>
   )

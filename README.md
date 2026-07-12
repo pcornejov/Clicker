@@ -1,4 +1,4 @@
-# ⚡ BattleHub
+# 🇨🇱 Chile Vota
 
 Plataforma de batallas virales de clicks. Los usuarios entran, votan por su opción favorita haciendo clic (sin registro, sin login) y comparten el sitio para que gane. La primera batalla es **"¿Cuál es la mejor región de Chile?"**, pero la temática se cambia por completo editando datos en Firestore — el código es agnóstico al tema.
 

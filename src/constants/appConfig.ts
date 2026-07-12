@@ -1,5 +1,6 @@
-export const APP_NAME = 'BattleHub'
+export const APP_NAME = 'Chile Vota'
 export const APP_TAGLINE = 'Batallas virales de clicks'
+export const APP_FLAG_EMOJI = '🇨🇱'
 
 /** How often locally accumulated clicks are flushed to the backend. */
 export const VOTE_FLUSH_INTERVAL_MS = 1500
