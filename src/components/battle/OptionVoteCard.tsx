@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { AnimatedNumber } from '@/components/shared/AnimatedNumber'
 import { OptionAvatar } from './OptionAvatar'
 import { cn } from '@/lib/utils'
 import type { RankedOption } from '@/utils/ranking'
@@ -52,10 +51,6 @@ export function OptionVoteCard({ option, canVote, onVote }: OptionVoteCardProps)
       <span className="min-w-0 flex-1 truncate text-sm font-semibold sm:text-base">
         {option.name}
       </span>
-      <AnimatedNumber
-        value={option.displayVotes}
-        className="shrink-0 text-xs font-bold text-muted-foreground sm:text-sm"
-      />
 
       <AnimatePresence>
         {bursts.map((burst) => (
