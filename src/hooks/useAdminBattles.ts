@@ -99,6 +99,31 @@ export function useRemoveOption() {
   })
 }
 
+export function useUploadOptionImage() {
+  return useMutation({
+    mutationFn: ({
+      battleId,
+      optionId,
+      file,
+    }: {
+      battleId: string
+      optionId: string
+      file: Blob
+    }) => battleService.uploadOptionImage(battleId, optionId, file),
+    onSuccess: () => toast.success('Foto actualizada'),
+    onError: () => toast.error('No se pudo subir la foto'),
+  })
+}
+
+export function useRemoveOptionImage() {
+  return useMutation({
+    mutationFn: ({ battleId, optionId }: { battleId: string; optionId: string }) =>
+      battleService.removeOptionImage(battleId, optionId),
+    onSuccess: () => toast.success('Foto eliminada'),
+    onError: () => toast.error('No se pudo eliminar la foto'),
+  })
+}
+
 export function useResetVotes() {
   return useMutation({
     mutationFn: (battleId: string) => battleService.resetVotes(battleId),

@@ -5,25 +5,35 @@ import { cn } from '@/lib/utils'
 
 interface OptionAvatarProps {
   name: string
+  /** Admin-uploaded photo, if any — takes priority over the curated default. */
+  imageUrl?: string
   className?: string
 }
 
 const SIZE_CLASSES = 'flex size-11 shrink-0 items-center justify-center rounded-xl sm:size-14'
 
 /**
- * Visual emblem for an option: a real photo when one is curated for the
- * name (see regionPhotos.ts), otherwise a gradient + icon derived from the
- * name. Falls back to the gradient automatically if the photo fails to load.
+ * Visual emblem for an option: the admin-uploaded photo when set, else a
+ * curated photo for known names (see regionPhotos.ts), else a gradient +
+ * icon derived from the name. Falls back automatically if a photo fails to
+ * load.
  */
-export function OptionAvatar({ name, className }: OptionAvatarProps) {
-  const photo = getRegionPhoto(name)
+export function OptionAvatar({ name, imageUrl, className }: OptionAvatarProps) {
+  const photoUrl = imageUrl || getRegionPhoto(name)?.imageUrl
   const [photoFailed, setPhotoFailed] = useState(false)
+  const [prevPhotoUrl, setPrevPhotoUrl] = useState(photoUrl)
   const { icon: Icon, gradient } = getOptionVisual(name)
 
-  if (photo && !photoFailed) {
+  // A newly uploaded photo deserves a fresh chance even if a previous one failed.
+  if (prevPhotoUrl !== photoUrl) {
+    setPrevPhotoUrl(photoUrl)
+    setPhotoFailed(false)
+  }
+
+  if (photoUrl && !photoFailed) {
     return (
       <img
-        src={photo.imageUrl}
+        src={photoUrl}
         alt=""
         loading="lazy"
         decoding="async"

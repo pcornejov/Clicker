@@ -5,4 +5,6 @@ export interface BattleOption {
   name: string
   votes: number
   createdAt: Date
+  /** Admin-uploaded photo (Firebase Storage download URL). Overrides any curated default. */
+  imageUrl?: string
 }

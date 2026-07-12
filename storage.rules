@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// ⚠️ MVP: same accepted risk as firestore.rules — /admin has no auth yet, so
+// isAdmin() is a stand-in that allows all writes. TODO(roadmap): tie both
+// to real auth together when login is added.
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() {
+      return true; // TODO: request.auth != null && request.auth.token.admin == true
+    }
+
+    // One image per option, uploaded from /admin. Images are resized
+    // client-side before upload (see utils/image.ts), so 8MB is a generous
+    // ceiling, not the expected size.
+    match /battles/{battleId}/options/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin()
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

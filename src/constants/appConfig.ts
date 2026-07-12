@@ -10,3 +10,6 @@ export const VOTE_FLUSH_INTERVAL_MS = 1500
  * `firestore.rules` — keep both in sync.
  */
 export const MAX_VOTES_PER_FLUSH = 100
+
+/** Raw file size accepted before client-side resize. Must match `storage.rules`. */
+export const MAX_UPLOAD_IMAGE_BYTES = 8 * 1024 * 1024

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { OptionAvatar } from '@/components/battle/OptionAvatar'
+import { OptionImageButton } from './OptionImageButton'
 import { useAddOption, useBattleOptions, useRemoveOption } from '@/hooks/useAdminBattles'
 import { formatVotes } from '@/utils/format'
 
@@ -57,19 +58,24 @@ export function OptionsEditor({ battleId }: OptionsEditorProps) {
           {(options ?? []).map((option) => (
             <li
               key={option.id}
-              className="flex items-center justify-between gap-2 rounded-lg border bg-card/60 px-3 py-2"
+              className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5 rounded-lg border bg-card/60 px-3 py-2"
             >
               <span className="flex min-w-0 items-center gap-2">
-                <OptionAvatar name={option.name} className="size-7 sm:size-7" />
+                <OptionAvatar
+                  name={option.name}
+                  imageUrl={option.imageUrl}
+                  className="size-7 sm:size-7"
+                />
                 <span className="truncate text-sm font-medium">{option.name}</span>
-              </span>
-              <span className="flex shrink-0 items-center gap-3">
                 <span
-                  className="text-xs text-muted-foreground"
+                  className="shrink-0 text-xs text-muted-foreground"
                   style={{ fontVariantNumeric: 'tabular-nums' }}
                 >
                   {formatVotes(option.votes)} votos
                 </span>
+              </span>
+              <span className="ml-auto flex shrink-0 items-center gap-1">
+                <OptionImageButton battleId={battleId} option={option} />
                 <Button
                   variant="ghost"
                   size="icon"

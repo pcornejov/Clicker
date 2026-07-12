@@ -67,7 +67,7 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
           {option.position}
         </span>
 
-        <OptionAvatar name={option.name} />
+        <OptionAvatar name={option.name} imageUrl={option.imageUrl} />
 
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex items-baseline justify-between gap-3">

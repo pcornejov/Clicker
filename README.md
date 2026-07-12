@@ -7,7 +7,7 @@ Plataforma de batallas virales de clicks. Los usuarios entran, votan por su opci
 - **React 19** + **TypeScript** (estricto) + **Vite**
 - **TailwindCSS v4** + **shadcn/ui** + **motion** (animaciones)
 - **React Router** + **TanStack React Query**
-- **Firebase Firestore** (tiempo real, sin backend propio) + **App Check** (preparado)
+- **Firebase Firestore** (tiempo real, sin backend propio) + **Storage** (fotos de opciones) + **App Check** (preparado)
 - **Cloudflare Pages / GitHub Pages** para hosting, **Cloudflare Turnstile** (preparado)
 
 ## Instalación
@@ -49,10 +49,11 @@ Ninguna clave va hardcodeada; el `.env` real nunca se commitea.
 1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com/) (sin Google Analytics).
 2. Agrega una **app web** y copia la configuración al `.env`.
 3. Crea una base **Firestore** (modo producción).
-4. Publica las reglas: `npx firebase-tools deploy --only firestore:rules`.
-5. En el sitio, entra a `/admin` → **Sembrar ejemplo** → **Activar**.
+4. Crea un bucket de **Storage** (Build → Storage → Comenzar) — se usa para las fotos que suba el admin por cada opción.
+5. Publica las reglas: `npx firebase-tools deploy --only firestore:rules,storage`.
+6. En el sitio, entra a `/admin` → **Sembrar ejemplo** → **Activar**.
 
-> ⚠️ **Seguridad del MVP**: `/admin` no tiene autenticación todavía y las reglas de escritura administrativas están abiertas (`isAdmin()` devuelve `true` en `firestore.rules`). Es un riesgo aceptado para validar la hipótesis; el TODO de login + reglas reales está marcado en el código.
+> ⚠️ **Seguridad del MVP**: `/admin` no tiene autenticación todavía y las reglas de escritura administrativas (Firestore y Storage) están abiertas (`isAdmin()` devuelve `true`). Es un riesgo aceptado para validar la hipótesis; el TODO de login + reglas reales está marcado en el código.
 
 ## Deploy
 
@@ -95,9 +96,11 @@ Componentes → Hooks (React Query) → BattleService (interfaz) → Firestore
 
 ```
 battles/{battleId}              title, description, status, startDate, endDate, createdAt, updatedAt
-  └─ options/{optionId}         battleId, name, votes, createdAt
+  └─ options/{optionId}         battleId, name, votes, createdAt, imageUrl?
 settings/app                    activeBattleId
 ```
+
+Las fotos de las opciones se guardan en Firebase Storage (`battles/{battleId}/options/{optionId}.jpg`, redimensionadas a 480px en el navegador antes de subir) y su URL queda en `imageUrl`. Sin foto propia, la opción usa una foto curada (solo para las 16 regiones de ejemplo, `src/constants/regionPhotos.ts`) o un emblema de ícono + gradiente derivado del nombre — nunca una tarjeta vacía.
 
 ## Estructura del proyecto
 
@@ -111,14 +114,15 @@ src/
     ui/            shadcn/ui
   constants/       Config de la app, rutas, query keys, datos de ejemplo
   contexts/        Providers (React Query + toasts)
-  firebase/        Init por env vars, emulador, stub de App Check
+  firebase/        Init por env vars, emulador, Storage, stub de App Check
   hooks/           useActiveBattle, useVote, useCountdown, useShare, admin CRUD
   layouts/         MainLayout
   pages/           BattlePage, AdminPage, NotFoundPage
-  services/        BattleService (interfaz) + implementación Firestore + VoteBuffer
+  services/        BattleService (interfaz) + implementación Firestore/Storage + VoteBuffer
   types/           Battle, BattleOption, AppSettings
-  utils/           Ranking, formato es-CL, fechas, estado efectivo
+  utils/           Ranking, formato es-CL, fechas, estado efectivo, resize de imágenes
 firestore.rules    Reglas con validación de incrementos de votos
+storage.rules      Reglas de Storage (fotos de opciones, tipo/tamaño validados)
 ```
 
 ## Scripts

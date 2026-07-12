@@ -46,6 +46,10 @@ export interface BattleService {
   deleteBattle(battleId: string): Promise<void>
   addOption(battleId: string, name: string): Promise<string>
   removeOption(battleId: string, optionId: string): Promise<void>
+  /** Uploads a photo for an option and sets it as its `imageUrl`. Returns the download URL. */
+  uploadOptionImage(battleId: string, optionId: string, file: Blob): Promise<string>
+  /** Removes an option's uploaded photo, reverting it to the default emblem. */
+  removeOptionImage(battleId: string, optionId: string): Promise<void>
   /** Sets every option of the battle back to zero votes. */
   resetVotes(battleId: string): Promise<void>
   /** Marks a battle as the one shown on the home page (null = none). */

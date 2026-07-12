@@ -1,6 +1,7 @@
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -17,7 +18,9 @@ import {
   type FirestoreDataConverter,
   type QueryDocumentSnapshot,
 } from 'firebase/firestore'
+import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { getDb } from '@/firebase/firestore'
+import { getStorageInstance } from '@/firebase/storage'
 import { SEED_BATTLE, SEED_OPTIONS } from '@/constants/seedData'
 import type { Battle, BattleInput, BattleOption, BattleStatus } from '@/types'
 import type { BattleService, Unsubscribe } from './battleService'
@@ -77,8 +80,15 @@ const optionConverter: FirestoreDataConverter<BattleOption> = {
       name: (data.name as string) ?? '',
       votes: (data.votes as number) ?? 0,
       createdAt: toDate(data.createdAt as Timestamp | null) ?? new Date(),
+      imageUrl: (data.imageUrl as string | undefined) || undefined,
     }
   },
+}
+
+function optionImageRef(battleId: string, optionId: string) {
+  // Fixed extension: uploads are always re-encoded to JPEG client-side
+  // (see utils/image.ts), so re-uploads overwrite cleanly with no orphans.
+  return ref(getStorageInstance(), `battles/${battleId}/options/${optionId}.jpg`)
 }
 
 function battlesCol() {
@@ -182,6 +192,23 @@ export const firestoreBattleService: BattleService = {
 
   async removeOption(battleId, optionId) {
     await deleteDoc(doc(getDb(), BATTLES, battleId, OPTIONS, optionId))
+  },
+
+  async uploadOptionImage(battleId, optionId, file) {
+    const storageRef = optionImageRef(battleId, optionId)
+    await uploadBytes(storageRef, file, { contentType: 'image/jpeg' })
+    const url = await getDownloadURL(storageRef)
+    await updateDoc(doc(getDb(), BATTLES, battleId, OPTIONS, optionId), { imageUrl: url })
+    return url
+  },
+
+  async removeOptionImage(battleId, optionId) {
+    await deleteObject(optionImageRef(battleId, optionId)).catch(() => {
+      // Best-effort: nothing to clean up if it was never uploaded.
+    })
+    await updateDoc(doc(getDb(), BATTLES, battleId, OPTIONS, optionId), {
+      imageUrl: deleteField(),
+    })
   },
 
   async resetVotes(battleId) {
