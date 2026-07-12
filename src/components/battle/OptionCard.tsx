@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { AnimatedNumber } from '@/components/shared/AnimatedNumber'
+import { OptionAvatar } from './OptionAvatar'
 import { formatPercentage } from '@/utils/format'
 import { cn } from '@/lib/utils'
 import type { RankedOption } from '@/utils/ranking'
@@ -53,10 +54,10 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
       )}
       aria-label={`Votar por ${option.name}`}
     >
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-2.5 sm:gap-3.5">
         <span
           className={cn(
-            'flex size-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold sm:size-9',
+            'flex size-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold sm:size-9 sm:text-sm',
             // Medals only mean something once there are votes.
             (option.displayVotes > 0 && RANK_STYLES[option.position]) ||
               'bg-secondary text-muted-foreground',
@@ -65,6 +66,8 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
         >
           {option.position}
         </span>
+
+        <OptionAvatar name={option.name} />
 
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex items-baseline justify-between gap-3">

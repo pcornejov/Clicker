@@ -3,6 +3,7 @@ import { PlusIcon, Trash2Icon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
+import { OptionAvatar } from '@/components/battle/OptionAvatar'
 import { useAddOption, useBattleOptions, useRemoveOption } from '@/hooks/useAdminBattles'
 import { formatVotes } from '@/utils/format'
 
@@ -58,8 +59,11 @@ export function OptionsEditor({ battleId }: OptionsEditorProps) {
               key={option.id}
               className="flex items-center justify-between gap-2 rounded-lg border bg-card/60 px-3 py-2"
             >
-              <span className="truncate text-sm font-medium">{option.name}</span>
-              <span className="flex items-center gap-3">
+              <span className="flex min-w-0 items-center gap-2">
+                <OptionAvatar name={option.name} className="size-7 sm:size-7" />
+                <span className="truncate text-sm font-medium">{option.name}</span>
+              </span>
+              <span className="flex shrink-0 items-center gap-3">
                 <span
                   className="text-xs text-muted-foreground"
                   style={{ fontVariantNumeric: 'tabular-nums' }}
