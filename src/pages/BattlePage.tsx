@@ -11,6 +11,7 @@ import { useActiveBattle } from '@/hooks/useActiveBattle'
 import { useVote } from '@/hooks/useVote'
 import { buildRanking } from '@/utils/ranking'
 import { getEffectiveStatus } from '@/utils/battleStatus'
+import { getRegionPhoto } from '@/constants/regionPhotos'
 
 export function BattlePage() {
   const { battle, options, isLoading, error, hasNoActiveBattle } = useActiveBattle()
@@ -76,8 +77,23 @@ export function BattlePage() {
       )}
 
       {canVote && (
-        <p className="pb-4 text-center text-xs text-muted-foreground">
+        <p className="text-center text-xs text-muted-foreground">
           Toca una tarjeta para votar. Puedes votar todas las veces que quieras.
+        </p>
+      )}
+
+      {ranked.some((option) => getRegionPhoto(option.name)) && (
+        <p className="pb-4 text-center text-[11px] text-muted-foreground/60">
+          Fotos:{' '}
+          <a
+            href="https://commons.wikimedia.org"
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-dotted underline-offset-2 hover:text-muted-foreground"
+          >
+            Wikimedia Commons
+          </a>{' '}
+          (CC BY-SA / CC BY / dominio público)
         </p>
       )}
     </div>
