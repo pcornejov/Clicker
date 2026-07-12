@@ -5,7 +5,7 @@ const STATUS_BADGES: Record<EffectiveBattleStatus, { label: string; className: s
   live: { label: 'En vivo', className: 'border-red-500/30 bg-red-500/10 text-red-400' },
   scheduled: {
     label: 'Próximamente',
-    className: 'border-sky-500/30 bg-sky-500/10 text-sky-400',
+    className: 'border-blue-500/30 bg-blue-500/10 text-blue-400',
   },
   ended: { label: 'Finalizada', className: 'border-border bg-card text-muted-foreground' },
   draft: { label: 'Borrador', className: 'border-border bg-card text-muted-foreground' },

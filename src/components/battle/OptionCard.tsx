@@ -18,7 +18,8 @@ interface Burst {
 }
 
 const RANK_STYLES: Record<number, string> = {
-  1: 'bg-gradient-to-br from-amber-400 to-orange-500 text-neutral-950',
+  // Copper tone — a nod to Chile as the world's top copper producer.
+  1: 'bg-gradient-to-br from-amber-400 to-orange-600 text-neutral-950',
   2: 'bg-neutral-300 text-neutral-900',
   3: 'bg-amber-800/80 text-amber-100',
 }
@@ -49,7 +50,7 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
       whileTap={canVote ? { scale: 0.975 } : undefined}
       className={cn(
         'relative w-full select-none overflow-hidden rounded-2xl border bg-card/60 p-4 text-left backdrop-blur transition-colors sm:p-5',
-        canVote && 'cursor-pointer hover:border-amber-500/40 hover:bg-card',
+        canVote && 'cursor-pointer hover:border-blue-500/40 hover:bg-card',
         isLeader && 'border-amber-500/40 shadow-[0_0_32px_-12px_theme(colors.amber.500/60%)]',
       )}
       aria-label={`Votar por ${option.name}`}
@@ -91,8 +92,8 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
               className={cn(
                 'h-full rounded-full',
                 isLeader
-                  ? 'bg-gradient-to-r from-amber-400 to-red-500'
-                  : 'bg-gradient-to-r from-amber-500/70 to-orange-500/70',
+                  ? 'bg-gradient-to-r from-blue-500 to-amber-500'
+                  : 'bg-gradient-to-r from-blue-500/70 to-blue-400/70',
               )}
               initial={false}
               animate={{ width: `${Math.max(option.relativeToLeader, 1)}%` }}
@@ -113,7 +114,7 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
             onAnimationComplete={() =>
               setBursts((current) => current.filter((b) => b.id !== burst.id))
             }
-            className="pointer-events-none absolute top-3 text-sm font-bold text-amber-400"
+            className="pointer-events-none absolute top-3 text-sm font-bold text-blue-400"
             style={{ left: burst.x }}
             aria-hidden="true"
           >

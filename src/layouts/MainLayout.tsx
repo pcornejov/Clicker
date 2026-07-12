@@ -8,7 +8,7 @@ export function MainLayout() {
       {/* Ambient background glow */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-[radial-gradient(60%_50%_at_50%_0%,theme(colors.amber.500/10%),transparent)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-[radial-gradient(60%_50%_at_50%_0%,theme(colors.blue.500/12%),transparent)]"
       />
 
       <header className="mx-auto flex w-full max-w-2xl items-center justify-between px-4 py-5">
