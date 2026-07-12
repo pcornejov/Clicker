@@ -6,6 +6,18 @@ import { queryKeys } from '@/constants/queryKeys'
 import type { BattleInput, BattleOption } from '@/types'
 import { useFirestoreSubscription } from './useFirestoreSubscription'
 
+/** Realtime id of the battle currently shown on the home page. */
+export function useActiveBattleId() {
+  return useFirestoreSubscription<string | null>({
+    queryKey: queryKeys.activeBattleId,
+    subscribe: useCallback(
+      (onData: (id: string | null) => void, onError: (e: Error) => void) =>
+        battleService.subscribeToActiveBattleId(onData, onError),
+      [],
+    ),
+  })
+}
+
 /** One-time list of every battle for the admin panel. */
 export function useBattlesList() {
   return useQuery({
