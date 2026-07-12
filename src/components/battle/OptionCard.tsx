@@ -57,7 +57,9 @@ export function OptionCard({ option, canVote, onVote }: OptionCardProps) {
         <span
           className={cn(
             'flex size-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold sm:size-9',
-            RANK_STYLES[option.position] ?? 'bg-secondary text-muted-foreground',
+            // Medals only mean something once there are votes.
+            (option.displayVotes > 0 && RANK_STYLES[option.position]) ||
+              'bg-secondary text-muted-foreground',
           )}
           style={{ fontVariantNumeric: 'tabular-nums' }}
         >

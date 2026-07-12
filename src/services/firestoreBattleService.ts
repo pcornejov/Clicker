@@ -2,6 +2,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   increment,
   onSnapshot,
@@ -191,10 +192,25 @@ export const firestoreBattleService: BattleService = {
   },
 
   async setActiveBattle(battleId) {
-    const batch = writeBatch(getDb())
-    batch.set(doc(getDb(), SETTINGS_APP_PATH), { activeBattleId: battleId })
+    const db = getDb()
+    const batch = writeBatch(db)
+    batch.set(doc(db, SETTINGS_APP_PATH), { activeBattleId: battleId })
+    // Demote the previously active battle so only one ever reads as active.
+    const settings = await getDoc(doc(db, SETTINGS_APP_PATH))
+    const previousId = settings.exists()
+      ? ((settings.data().activeBattleId as string | null) ?? null)
+      : null
+    if (previousId && previousId !== battleId) {
+      const previous = await getDoc(doc(db, BATTLES, previousId))
+      if (previous.exists()) {
+        batch.update(previous.ref, {
+          status: 'draft' satisfies BattleStatus,
+          updatedAt: serverTimestamp(),
+        })
+      }
+    }
     if (battleId) {
-      batch.update(doc(getDb(), BATTLES, battleId), {
+      batch.update(doc(db, BATTLES, battleId), {
         status: 'active' satisfies BattleStatus,
         updatedAt: serverTimestamp(),
       })
