@@ -1,28 +1,16 @@
-import { motion } from 'motion/react'
-import { OptionCard } from './OptionCard'
+import { RankingRow } from './RankingRow'
 import type { RankedOption } from '@/utils/ranking'
 
 interface RankingListProps {
   ranked: RankedOption[]
-  canVote: boolean
-  onVote: (optionId: string) => void
 }
 
-/**
- * Ranking with FLIP layout animation: when an option overtakes another, the
- * cards glide to their new positions.
- */
-export function RankingList({ ranked, canVote, onVote }: RankingListProps) {
+/** Live leaderboard: rows reorder via FLIP layout animation as votes change. */
+export function RankingList({ ranked }: RankingListProps) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {ranked.map((option) => (
-        <motion.div
-          key={option.id}
-          layout
-          transition={{ type: 'spring', stiffness: 300, damping: 32 }}
-        >
-          <OptionCard option={option} canVote={canVote} onVote={onVote} />
-        </motion.div>
+        <RankingRow key={option.id} option={option} />
       ))}
     </div>
   )

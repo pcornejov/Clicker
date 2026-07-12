@@ -1,6 +1,7 @@
 import { SwordsIcon, TrophyIcon } from 'lucide-react'
 import { BattleHeader } from '@/components/battle/BattleHeader'
 import { CountdownTimer } from '@/components/battle/CountdownTimer'
+import { OptionGrid } from '@/components/battle/OptionGrid'
 import { RankingList } from '@/components/battle/RankingList'
 import { ShareButton } from '@/components/battle/ShareButton'
 import { TotalVotesCounter } from '@/components/battle/TotalVotesCounter'
@@ -33,6 +34,9 @@ export function BattlePage() {
   const { ranked, totalVotes } = buildRanking(options, pendingVotes)
   const canVote = status === 'live' && ranked.length > 0
   const winner = status === 'ended' ? ranked[0] : undefined
+  // The voting grid stays in a fixed order so a rapid tap never chases a
+  // card that just reordered — only the ranking below moves.
+  const gridOptions = [...ranked].sort((a, b) => a.name.localeCompare(b.name, 'es'))
 
   return (
     <div className="mx-auto w-full max-w-2xl space-y-8 sm:space-y-10">
@@ -73,13 +77,23 @@ export function BattlePage() {
           description="Esta batalla aún no tiene competidores."
         />
       ) : (
-        <RankingList ranked={ranked} canVote={canVote} onVote={vote} />
-      )}
+        <>
+          <div className="space-y-3">
+            <OptionGrid options={gridOptions} canVote={canVote} onVote={vote} />
+            {canVote && (
+              <p className="text-center text-xs text-muted-foreground">
+                Toca una tarjeta para votar. Puedes votar todas las veces que quieras.
+              </p>
+            )}
+          </div>
 
-      {canVote && (
-        <p className="text-center text-xs text-muted-foreground">
-          Toca una tarjeta para votar. Puedes votar todas las veces que quieras.
-        </p>
+          <div className="space-y-3">
+            <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
+              Ranking
+            </h2>
+            <RankingList ranked={ranked} />
+          </div>
+        </>
       )}
 
       {ranked.some((option) => getCuratedPhoto(option.name)) && (
