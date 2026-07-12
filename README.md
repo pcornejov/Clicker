@@ -34,13 +34,15 @@ Con el emulador no se necesita ningún proyecto Firebase real. Visita `/admin`, 
 
 ## Variables de entorno
 
-| Variable                                         | Descripción                                                                     |
-| ------------------------------------------------ | ------------------------------------------------------------------------------- |
-| `VITE_FIREBASE_API_KEY` … `VITE_FIREBASE_APP_ID` | Configuración web de tu proyecto Firebase (Consola → Configuración → Tus apps). |
-| `VITE_USE_FIREBASE_EMULATOR`                     | `true` para usar el Firestore Emulator local.                                   |
-| `VITE_TURNSTILE_SITE_KEY`                        | Site key de Cloudflare Turnstile (protección, aún no activa).                   |
-| `VITE_FIREBASE_APP_CHECK_KEY`                    | Clave del proveedor de App Check (ver `src/firebase/appCheck.ts`).              |
-| `VITE_BASE_PATH`                                 | Solo para builds bajo subruta (lo define el workflow de GitHub Pages).          |
+| Variable                                              | Descripción                                                                     |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `VITE_FIREBASE_API_KEY` … `VITE_FIREBASE_APP_ID`      | Configuración web de tu proyecto Firebase (Consola → Configuración → Tus apps). |
+| `VITE_USE_FIREBASE_EMULATOR`                          | `true` para usar el Firestore Emulator local.                                   |
+| `VITE_TURNSTILE_SITE_KEY`                             | Site key de Cloudflare Turnstile (protección, aún no activa).                   |
+| `VITE_FIREBASE_APP_CHECK_KEY`                         | Clave del proveedor de App Check (ver `src/firebase/appCheck.ts`).              |
+| `VITE_ADS_ENABLED`                                    | `true` para activar Google Ad Manager (preparado, ver `src/lib/ads.ts`).        |
+| `VITE_GOOGLE_AD_CLIENT_ID` / `VITE_GOOGLE_AD_SLOT_ID` | Publisher id y ad unit de Google Ad Manager/AdSense.                            |
+| `VITE_BASE_PATH`                                      | Solo para builds bajo subruta (lo define el workflow de GitHub Pages).          |
 
 Ninguna clave va hardcodeada; el `.env` real nunca se commitea.
 
@@ -54,6 +56,19 @@ Ninguna clave va hardcodeada; el `.env` real nunca se commitea.
 6. En el sitio, entra a `/admin` → **Sembrar ejemplo** → **Activar**.
 
 > ⚠️ **Seguridad del MVP**: `/admin` no tiene autenticación todavía y las reglas de escritura administrativas (Firestore y Storage) están abiertas (`isAdmin()` devuelve `true`). Es un riesgo aceptado para validar la hipótesis; el TODO de login + reglas reales está marcado en el código.
+
+## Monetización (preparado, no activo)
+
+El sitio está listo para activar **Google Ad Manager** (nivel "para pequeñas empresas", el sucesor de AdSense) sin mostrar nada hasta que se configure explícitamente:
+
+- `src/lib/ads.ts` — interruptor maestro (`VITE_ADS_ENABLED`) y credenciales.
+- `src/components/ads/ConsentBanner.tsx` — aviso de cookies, solo aparece con ads activos y sin respuesta previa guardada.
+- `src/components/ads/AdSlot.tsx` — el bloque de anuncio en sí; no carga ningún script de Google hasta que hay consentimiento.
+- `/privacidad` (`src/pages/PrivacyPage.tsx`) — política de privacidad, ya enlazada en el footer.
+
+**Para activarlo**: consigue aprobación en [Google Ad Manager](https://admanager.google.com), agrega un `ads.txt` en la raíz del sitio, y define `VITE_ADS_ENABLED=true`, `VITE_GOOGLE_AD_CLIENT_ID` y `VITE_GOOGLE_AD_SLOT_ID` (como secrets de GitHub si es para producción).
+
+> ⚠️ **Riesgo específico de este producto**: Chile Vota se basa en clickear rápido y repetido. Un anuncio ubicado cerca de la grilla de votación generará una tasa alta de clics accidentales, que Google detecta como tráfico inválido y puede suspender la cuenta. El `AdSlot` de referencia está montado en el footer, lejos del área de voto — mantén cualquier bloque nuevo igual de alejado.
 
 ## Deploy
 
@@ -108,16 +123,18 @@ Las fotos de las opciones se guardan en Firebase Storage (`battles/{battleId}/op
 src/
   assets/          Recursos estáticos
   components/
-    battle/        Portada: header, countdown, tarjetas de opciones, ranking, compartir
+    battle/        Portada: header, countdown, grilla de voto, ranking, compartir
     admin/         Panel: formulario, editor de opciones, tarjetas de batalla
+    ads/           ConsentBanner + AdSlot (Google Ad Manager, preparado)
     shared/        Skeletons, estados vacíos/error, número animado
     ui/            shadcn/ui
   constants/       Config de la app, rutas, query keys, datos de ejemplo
   contexts/        Providers (React Query + toasts)
   firebase/        Init por env vars, emulador, Storage, stub de App Check
-  hooks/           useActiveBattle, useVote, useCountdown, useShare, admin CRUD
+  hooks/           useActiveBattle, useVote, useCountdown, useShare, useConsent, admin CRUD
+  lib/             ads.ts — interruptor y credenciales de Google Ad Manager
   layouts/         MainLayout
-  pages/           BattlePage, AdminPage, NotFoundPage
+  pages/           BattlePage, AdminPage, PrivacyPage, NotFoundPage
   services/        BattleService (interfaz) + implementación Firestore/Storage + VoteBuffer
   types/           Battle, BattleOption, AppSettings
   utils/           Ranking, formato es-CL, fechas, estado efectivo, resize de imágenes
@@ -142,8 +159,10 @@ storage.rules      Reglas de Storage (fotos de opciones, tipo/tamaño validados)
 - [ ] Historial y batallas archivadas
 - [ ] Rankings históricos y logros
 - [ ] Notificaciones
-- [ ] Publicidad, donaciones y patrocinios
+- [ ] Donaciones y patrocinios (batallas/opciones patrocinadas por marcas)
 - [ ] SEO (Open Graph, títulos dinámicos) y PWA
 - [ ] Tema claro e internacionalización
 - [ ] Sharding de contadores si una opción supera ~1 write/s sostenido
 - [ ] Activar Firebase App Check + Cloudflare Turnstile (stubs listos)
+- [ ] Activar Google Ad Manager (stub listo, ver "Monetización")
+- [ ] Dominio propio `.cl` vía NIC Chile + Cloudflare DNS

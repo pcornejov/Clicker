@@ -6,9 +6,13 @@ import { NotFoundPage } from '@/pages/NotFoundPage'
 import { BattleSkeleton } from '@/components/shared/BattleSkeleton'
 import { ROUTES } from '@/constants/routes'
 
-// The admin panel is code-split: visitors never download it.
+// The admin panel and privacy page are code-split: visitors never download
+// them unless they navigate there.
 const AdminPage = lazy(() =>
   import('@/pages/AdminPage').then((module) => ({ default: module.AdminPage })),
+)
+const PrivacyPage = lazy(() =>
+  import('@/pages/PrivacyPage').then((module) => ({ default: module.PrivacyPage })),
 )
 
 function App() {
@@ -21,6 +25,14 @@ function App() {
           element={
             <Suspense fallback={<BattleSkeleton />}>
               <AdminPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path={ROUTES.privacy}
+          element={
+            <Suspense fallback={<BattleSkeleton />}>
+              <PrivacyPage />
             </Suspense>
           }
         />

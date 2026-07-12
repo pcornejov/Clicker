@@ -13,6 +13,12 @@ interface ImportMetaEnv {
   readonly VITE_TURNSTILE_SITE_KEY?: string
   /** reCAPTCHA/Turnstile key for Firebase App Check (see firebase/appCheck.ts). */
   readonly VITE_FIREBASE_APP_CHECK_KEY?: string
+  /** "true" to activate Google Ad Manager/AdSense (see lib/ads.ts). */
+  readonly VITE_ADS_ENABLED?: string
+  /** Google Ad Manager/AdSense publisher id, e.g. "ca-pub-XXXXXXXXXXXXXXX". */
+  readonly VITE_GOOGLE_AD_CLIENT_ID?: string
+  /** Ad unit id from the Ad Manager dashboard. */
+  readonly VITE_GOOGLE_AD_SLOT_ID?: string
 }
 
 interface ImportMeta {
